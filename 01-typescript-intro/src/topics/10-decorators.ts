@@ -1,5 +1,5 @@
 
-function classDecorator(
+function classDecorator<T extends {new(...args:any[]):{}}>(
     constructor: any
 ){
 
