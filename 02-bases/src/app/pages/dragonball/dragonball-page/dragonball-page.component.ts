@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
 
+import { Component, computed, signal } from '@angular/core';
 interface Character{
   id: number;
   name: string;
@@ -13,10 +13,40 @@ interface Character{
 })
 export class DragonballPageComponent {
 
+
+  name = signal('Gohan');
+  power = signal(1000);
+
   characters = signal<Character[]>([
     { id: 1, name: 'Goku', power: 9001 },
     { id: 2, name: 'Picoro', power: 2000 },
+    { id: 4, name: 'Yamcha', power: 500 },
     { id: 3, name: 'Trunks', power: 4000 },
   ])
+
+  powerClasses = computed(() => {
+    return{
+      'text-danger': true
+    }
+  })
+
+  addCharacter() {
+    if (!this.name() || !this.power() || this.power() <= 0) {
+      return;
+    }
+    const newCharacter:Character = {
+      id: this.characters.length + 1,
+      name : this.name(),
+      power: this.power()
+    }
+
+    this.characters.update((list) => [...list,newCharacter]);;
+    this.resetFields();
+  }
+
+  resetFields(){
+    this.name.set('');
+    this.power.set(0);
+  }
 
 }
