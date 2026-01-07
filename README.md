@@ -1,4 +1,13 @@
 # Angular2025
 
 ## Repaso typescript
+
 ## Bases Angular
+
+'''
+hashstrategy (no se tiene control en el server)
+    {
+      provide:LocationStrategy,
+      useClass:HashLocationStrategy
+    }
+'''
