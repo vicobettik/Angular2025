@@ -11,3 +11,5 @@ hashstrategy (no se tiene control en el server)
       useClass:HashLocationStrategy
     }
 '''
+
+## Gifs app, usando tailwind y api
