@@ -13,3 +13,5 @@ hashstrategy (no se tiene control en el server)
 '''
 
 ## Gifs app, usando tailwind y api
+
+se usa galería para gifs estilo masonry
