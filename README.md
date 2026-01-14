@@ -15,3 +15,5 @@ hashstrategy (no se tiene control en el server)
 ## Gifs app, usando tailwind y api
 
 se usa galería para gifs estilo masonry
+se usa httpClient, se tiene que proveer en app.config.ts 
+mapper para evitar que este tan "amarrado" a la respuesta de la api
