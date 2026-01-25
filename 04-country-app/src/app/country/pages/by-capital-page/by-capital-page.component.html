@@ -1,3 +1,10 @@
-<country-search-input placeHolder="Buscar por capital" (value)="onSearch($event)" />
+<country-search-input
+  placeHolder="Buscar por capital"
+  (value)="onSearch($event)"
+/>
 
-<country-country-list [countries]="countries()" />
+@if (isError()) {
+  <h3>{{ isError() }}</h3>
+} @else {
+  <country-country-list [countries]="countries()" />
+}
