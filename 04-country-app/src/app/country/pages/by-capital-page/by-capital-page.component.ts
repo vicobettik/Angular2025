@@ -4,6 +4,7 @@ import { CountryListComponent } from '../../components/country-list/country-list
 import { CountryService } from '../../services/country.service';
 import { RestCountry } from '../../interfaces/rest-countries.interface';
 import { Country } from '../../interfaces/country.interface';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -21,11 +22,14 @@ export class ByCapitalPageComponent {
 
   countryResource = resource({
 
-    request: () => ({query: this.query()}),
-    loader: async({}) => {
-      if (!this.query()) {
+    params: () => ({query: this.query()}),
+    loader: async({params}) => {
+      if (!params.query) {
         return [];
       }
+      return await firstValueFrom(
+        this.countryService.searchByCaptal(params.query)
+      )
 
     }
   })
