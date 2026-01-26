@@ -48,5 +48,23 @@ export class CountryService {
       )
   };
 
+  searchCountryByAlphaCode(query:string):Observable<Country|undefined>{
+
+    return this.http.get<RestCountry[]>(`${API_URL}/alpha/${query}`)
+      .pipe(
+        map((res) => {
+          return CountryMapper.mapRestCountryArrayToCountryArray(res);
+        }),
+        map((countries) => {
+          return countries.at(0)
+        }),
+        catchError((error) => {
+          return throwError(() => {
+            return new Error(`no se pueden obtener un pais con ese query:${query}`);
+          })
+        })
+      )
+  };
+
 
 }
