@@ -28,7 +28,7 @@ export class ByCapitalPageComponent {
       if (!params.query) {
         return of([]);
       }
-      return this.countryService.searchByCaptal(params.query)
+      return this.countryService.searchByCapital(params.query)
 
     }
   })

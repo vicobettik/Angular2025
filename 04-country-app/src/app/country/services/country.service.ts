@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable, catchError, throwError, delay, of } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { map, Observable, catchError, throwError, delay, of, tap } from 'rxjs';
 import { RestCountry } from '../interfaces/rest-countries.interface';
 import { CountryMapper } from '../mappers/country.mapper';
 import { Country } from '../interfaces/country.interface';
@@ -12,15 +12,24 @@ const API_URL = 'https://restcountries.com/v3.1';
 })
 export class CountryService {
   private http = inject(HttpClient);
+  private queryCacheCapital = new Map<string,Country[]>();
+  private queryCacheCountry = new Map<string, Country[]>();
 
-  searchByCaptal(query: string): Observable<Country[]> {
+  searchByCapital(query: string): Observable<Country[]> {
     const lowerCaseQuery = query.toLowerCase();
+
+    if (this.queryCacheCapital.has(query)) {
+      return of(this.queryCacheCapital.get(query) ?? []);
+    }
 
     return this.http
       .get<RestCountry[]>(`${API_URL}/capital/${lowerCaseQuery}`)
       .pipe(
         map((res) => {
           return CountryMapper.mapRestCountryArrayToCountryArray(res);
+        }),
+        tap((countries) => {
+          this.queryCacheCapital.set(query,countries)
         }),
         catchError((err) => {
           console.log('Error fetching', err);
@@ -34,10 +43,20 @@ export class CountryService {
   searchByCountry(query:string):Observable<Country[]>{
     const lowercaseQuery = query.toLowerCase();
 
+    if (this.queryCacheCountry.has(query)) {
+      return of(this.queryCacheCountry.get(query) ?? [])
+        .pipe(
+          delay(2000)
+        )
+    }
+
     return this.http.get<RestCountry[]>(`${API_URL}/name/${lowercaseQuery}`)
       .pipe(
         map((res) => {
           return CountryMapper.mapRestCountryArrayToCountryArray(res);
+        }),
+        tap((countries) => {
+          this.queryCacheCountry.set(query,countries);
         }),
         delay(2000),
         catchError((error) => {
