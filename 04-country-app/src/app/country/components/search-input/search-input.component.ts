@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 
 @Component({
   selector: 'country-search-input',
@@ -9,11 +9,25 @@ import { Component, input, output } from '@angular/core';
 export class SearchInputComponent {
 
   value = output<string>();
-  placeHolder = input('Buscar')
+  placeHolder = input('Buscar');
+  debounceTime = input(300);
+
+  inputValue = signal<string>('');
+
+  debounceEffect = effect((onCleanUp) => {
+    const value = this.inputValue();
+    const timeout = setTimeout(() => {
+      this.value.emit(value);
+    }, this.debounceTime());
+
+    onCleanUp(() => {
+      clearTimeout(timeout);
+    })
+  })
 
 
   onSearch(query:string) {
-    this.value.emit(query);
+    this.inputValue.set(query);
   }
 
 }
