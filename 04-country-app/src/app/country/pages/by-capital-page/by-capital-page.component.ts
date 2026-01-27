@@ -6,6 +6,7 @@ import { RestCountry } from '../../interfaces/rest-countries.interface';
 import { Country } from '../../interfaces/country.interface';
 import { firstValueFrom, of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop'
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -15,7 +16,11 @@ import { rxResource } from '@angular/core/rxjs-interop'
 })
 export class ByCapitalPageComponent {
   countryService = inject(CountryService);
-  query = signal('');
+  activatedRoute = inject(ActivatedRoute);
+  queryParam = this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
+  router = inject(Router);
+
+  query = signal(this.queryParam);
 
   onSearch(value:string){
     this.query.set(value);
@@ -28,6 +33,11 @@ export class ByCapitalPageComponent {
       if (!params.query) {
         return of([]);
       }
+      this.router.navigate(['/country/by-capital'],{
+        queryParams:{
+          query:params.query
+        }
+      })
       return this.countryService.searchByCapital(params.query)
 
     }

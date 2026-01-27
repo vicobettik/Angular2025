@@ -6,6 +6,7 @@
       autofocus
       #txtSearch
       (keyup)="onSearch(txtSearch.value)"
+      [value]="initialValue()"
     />
     <button class="btn btn-primary" (click)="onSearch(txtSearch.value)">Buscar</button>
 
