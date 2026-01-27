@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { map, Observable, catchError, throwError, delay, of, tap } from 'rxjs';
-import { RestCountry } from '../interfaces/rest-countries.interface';
+import { map, Observable, catchError, throwError, delay, of, tap, pipe } from 'rxjs';
+import { Region, RestCountry } from '../interfaces/rest-countries.interface';
 import { CountryMapper } from '../mappers/country.mapper';
 import { Country } from '../interfaces/country.interface';
+
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -14,6 +15,7 @@ export class CountryService {
   private http = inject(HttpClient);
   private queryCacheCapital = new Map<string,Country[]>();
   private queryCacheCountry = new Map<string, Country[]>();
+  private queryCacheRegion = new Map<Region, Country[]>();
 
   searchByCapital(query: string): Observable<Country[]> {
     const lowerCaseQuery = query.toLowerCase();
@@ -84,6 +86,34 @@ export class CountryService {
         })
       )
   };
+
+  searchByRegion(query: Region):Observable<Country[]|undefined>{
+
+    if(!query){
+      return of([])
+    }
+
+    if (this.queryCacheRegion.has(query)) {
+      return of(this.queryCacheRegion.get(query) ?? [])
+        .pipe(
+          delay(2000)
+        )
+    }
+
+    return this.http.get<RestCountry[]>(`${API_URL}/region/${query}`)
+      .pipe(
+        map((res) => {
+          return CountryMapper.mapRestCountryArrayToCountryArray(res);
+        }),
+        tap((countries) => this.queryCacheRegion.set(query,countries)),
+        catchError((error) => {
+
+          return throwError(() => {
+            return new Error(`no se pueden obtener un pais con ese query:${query}`);
+          })
+        })
+      )
+  }
 
 
 }
