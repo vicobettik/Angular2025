@@ -4,6 +4,7 @@ import { CountryListComponent } from '../../components/country-list/country-list
 import { firstValueFrom, of } from 'rxjs';
 import { CountryService } from '../../services/country.service';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-by-country-page',
@@ -12,24 +13,31 @@ import { rxResource } from '@angular/core/rxjs-interop';
   styleUrl: './by-country-page.component.css',
 })
 export class ByCountryPageComponent {
-
+  router = inject(Router);
   countryService = inject(CountryService);
+  activatedRoute = inject(ActivatedRoute);
+  queryParam = this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
 
-  query = signal('');
+  query = signal(this.queryParam);
 
   onSearch(value: string) {
     this.query.set(value);
   }
 
   countryResource = rxResource({
-    params: () => ({query: this.query()}),
-    stream: ({params}) => {
+    params: () => ({ query: this.query() }),
+    stream: ({ params }) => {
       if (!params.query) {
         return of([]);
       }
-      return this.countryService.searchByCountry(params.query)
-    }
-  })
+      this.router.navigate(['/country/by-country'],{
+        queryParams:{
+          query:params.query
+        }
+      })
+      return this.countryService.searchByCountry(params.query);
+    },
+  });
 
   // countryResource = resource({
   //   params: () => ({query: this.query()}),
@@ -42,5 +50,4 @@ export class ByCountryPageComponent {
   //     )
   //   }
   // })
-
 }
