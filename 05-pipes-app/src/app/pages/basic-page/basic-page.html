@@ -33,14 +33,45 @@
   </div>
 
   <div class="stat">
-    <div class="stat-title">Uppercase Pipe</div>
-    <div class="stat-value">{{ nameLower() | uppercase }}</div>
-    <div class="stat-desc">{{ nameLower() }}</div>
+    <div class="stat-title">Date|long|GMT-6</div>
+    <div class="stat-value">{{ customDate() | date: 'short' : 'GMT-6' }}</div>
+    <div class="stat-desc">{{ customDate() }}</div>
+  </div>
+</div>
+
+<div class="divider w-full"></div>
+
+<div class="stats stats-vertical md:stats-horizontal shadow w-full">
+  <div class="stat">
+    <div class="stat-title">Date Pipe | long</div>
+    <div class="stat-value">{{ customDate() | date: 'long' }}</div>
+    <div class="stat-desc">{{ customDate() }}</div>
   </div>
 
   <div class="stat">
-    <div class="stat-title">Titlecase Pipe</div>
-    <div class="stat-value">{{ fullName() | titlecase }}</div>
-    <div class="stat-desc">{{ fullName() }}</div>
+    <div class="stat-title">Date|long|GMT-4</div>
+    <div class="stat-value">{{ customDate() | date: 'short' : 'GMT-4' }}</div>
+    <div class="stat-desc">{{ customDate() }}</div>
+  </div>
+</div>
+
+<div class="divider w-full"></div>
+
+<div class="stats stats-vertical md:stats-horizontal shadow w-full">
+  <div class="stat">
+    <div class="stat-title">Date</div>
+    <div class="stat-value">{{ customDate() | date: 'dd/MM/yyyy' }}</div>
+    <div class="stat-desc">{{ customDate() }}</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">Date</div>
+    <div class="stat-value">{{ customDate() | date: 'HH:mm:ss' }}</div>
+    <div class="stat-desc">{{ customDate() }}</div>
+  </div>
+   <div class="stat">
+    <div class="stat-title">Date</div>
+    <div class="stat-value">{{ customDate() | date: 'EEEE d, MMMM' }}</div>
+    <div class="stat-desc">{{ customDate() }}</div>
   </div>
 </div>
