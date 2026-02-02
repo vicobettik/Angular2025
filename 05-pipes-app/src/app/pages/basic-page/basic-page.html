@@ -75,3 +75,20 @@
     <div class="stat-desc">{{ customDate() }}</div>
   </div>
 </div>
+
+<div class="divider"></div>
+
+<div class="flex flex-row gap-2">
+  <h1 class="text-2xl font-bold">Local actual:</h1>
+  <span class="badge badge-secondary">{{currentLocale()}}</span>
+
+  <button (click)="changeLocal('fr')" class="btn btn-primary ">
+    Cambiar a francés
+  </button>
+  <button (click)="changeLocal('en')"  class="btn btn-primary">
+    Cambiar a inglés
+  </button>
+  <button (click)="changeLocal('es')" class="btn btn-primary">
+    Cambiar a español
+  </button>
+</div>
