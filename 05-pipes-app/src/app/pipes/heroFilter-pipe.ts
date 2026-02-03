@@ -12,7 +12,7 @@ export class HeroFilterPipe implements PipeTransform {
     }
 
     search = search.toLowerCase();
-    return value.filter((hero) => {
+    return [...value].filter((hero) => {
       return hero.name.toLowerCase().includes(search);
     })
 
