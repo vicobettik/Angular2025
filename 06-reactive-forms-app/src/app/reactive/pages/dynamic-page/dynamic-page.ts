@@ -24,8 +24,29 @@ export class DynamicPage {
     ),
   });
 
+  newFavoriteGame = this.fb.control('',[Validators.required])
+
   get favoriteGames(){
     return this.myForm.get('favoriteGames') as FormArray;
+  }
+
+  onAddToFavorites(){
+    if (this.newFavoriteGame.invalid) {
+      return;
+    }
+
+    const newFavorite = this.newFavoriteGame.value;
+    this.favoriteGames.push(this.fb.control(newFavorite,[Validators.required]))
+    this.newFavoriteGame.reset();
+  }
+
+  onDeleteFavorite(index:number){
+    this.favoriteGames.removeAt(index);
+  }
+
+  onSubmit(){
+    console.log('submit')
+    this.myForm.markAllAsTouched();
   }
 
 }
