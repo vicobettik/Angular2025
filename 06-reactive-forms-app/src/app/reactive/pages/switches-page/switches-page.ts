@@ -21,5 +21,6 @@ export class SwitchesPage {
 
   onSubmit() {
     this.myForm.markAllAsTouched();
+
   }
 }

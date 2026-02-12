@@ -1,5 +1,9 @@
-import { FormArray, FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidationErrors } from '@angular/forms';
 export class FormUtils {
+  static namePattern = '([a-zA-Z]+) ([a-zA-Z]+)';
+  static emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+  static notOnlySpacesPattern = '^[a-zA-Z0-9]+$';
+
   static fieldHasErrors(form: FormGroup, fieldName: string): boolean {
     return !!(form.get(fieldName)?.errors && form.get(fieldName)?.touched);
   }
@@ -28,8 +32,7 @@ export class FormUtils {
     return FormUtils.getTextError(errors);
   }
 
-  static getTextError(errors:ValidationErrors) {
-
+  static getTextError(errors: ValidationErrors) {
     for (const key of Object.keys(errors)) {
       switch (key) {
         case 'required':
@@ -40,9 +43,29 @@ export class FormUtils {
 
         case 'min':
           return `Valor minimo de ${errors['min'].min}`;
+
+        case 'email':
+          return 'Debe introducir un email valido';
+
+        case 'pattern':
+          if (errors['pattern'].requiredPattern === this.emailPattern) {
+            return `Debe ser un email válido`;
+          }
+          return 'Error de patron contra expresión regular';
+
+        default:
+          return 'Error de validacion no controlado';
       }
     }
     return null;
-  };
+  }
 
+  static isFieldOneEqualFieldTwo(field1: string, field2: string) {
+    return (formGroup: AbstractControl) => {
+      const fieldValue = formGroup.get(field1)?.value;
+      const field2Value = formGroup.get(field2)?.value;
+
+      return fieldValue === field2Value ? null : { passwordsNotEqual: true };
+    };
+  }
 }
