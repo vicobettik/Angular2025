@@ -1,4 +1,5 @@
-import { afterEveryRender, afterNextRender, afterRenderEffect, Component } from '@angular/core';
+import { afterEveryRender, afterNextRender, afterRenderEffect, Component, effect, signal } from '@angular/core';
+import { Title } from '../../components/title/title';
 
 const log = (...messages: string[]) => {
   console.log(`${messages[0]} %c${messages.slice(1).join(', ')}`, 'color:#bada55');
@@ -6,13 +7,34 @@ const log = (...messages: string[]) => {
 
 @Component({
   selector: 'app-home-page',
-  imports: [],
+  imports: [Title],
   templateUrl: './home-page.html',
 })
 export class HomePage {
+
+  traditionalProperty = 'Victor';
+  signalProperty = signal('Victor');
+
   constructor() {
     log('constructor llamado');
   }
+
+  changeTraditional(){
+    this.traditionalProperty = 'Victor Fuentes Menes'
+  };
+
+
+  changeSignal(){
+    this.signalProperty.set('Victor Fuentes Menes');
+  };
+
+  basicEffect = effect((onCleanUp) => {
+    log('effect', 'Disparar efectos secundarios');
+
+    onCleanUp(() => {
+      log('onCleanUp', 'se ejecuta cuando el efecto se va a destruir')
+    })
+  })
 
   ngOnInit() {
     log('ngOnInit', "	Runs once after Angular has initialized all the component's inputs.");
